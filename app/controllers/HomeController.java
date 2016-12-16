@@ -6,6 +6,7 @@ import play.mvc.*;
 import play.data.*;
 import play.db.ebean.Transactional;
 
+import play.api.Environment;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -22,9 +23,12 @@ public class HomeController extends Controller {
     // Declare a private FormFactory instance
     private FormFactory formFactory;
 
+    private Environment env;
+
     //  Inject an instance of FormFactory it into the controller via its constructor
     @Inject
-    public HomeController(FormFactory f) {
+    public HomeController(FormFactory f, Environment e) {
+        this.env = e;
         this.formFactory = f;
     }
 
@@ -59,6 +63,6 @@ public class HomeController extends Controller {
             productsList = Category.find.ref(cat).getProducts();
         }
 
-        return ok(products.render(productsList, categoriesList, getUserFromSession()));
+        return ok(products.render(productsList, categoriesList, getUserFromSession(), env));
     }
 }

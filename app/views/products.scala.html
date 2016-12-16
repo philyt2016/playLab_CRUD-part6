@@ -1,4 +1,4 @@
-@(products: List[models.Product], categories: List[models.Category], user: models.users.User)
+@(products: List[models.Product], categories: List[models.Category], user: models.users.User, env: play.api.Environment)
 
 <!-- Pass page title and content {html between braces} to the main view -->
 @main("Products", user) {
@@ -30,7 +30,7 @@
           <thead>
           <!-- The header row-->
           <tr>
-            <th>ID</th>
+            <th>Image</th>
             <th>Name</th>
             <th>Category</th>
             <th>Description</th>
@@ -43,7 +43,11 @@
 					<!-- Start of For loop - For each p in products add a row -->
           @for(p <- products) {
               <tr>
-                  <td>@p.getId</td>
+               @if(env.resource("public/images/productImages/thumbnails/" + p.getId + ".jpg").isDefined) {
+                      <td><img src="/assets/images/productImages/thumbnails/@(p.getId + ".jpg")"/></td>
+                  } else {
+                      <td><img src="/assets/images/productImages/thumbnails/noImage.png"/></td>
+                  }
                   <td>@p.getName</td>
                   <td>@p.getCategory.getName</td>
                   <td>@p.getDescription</td>
